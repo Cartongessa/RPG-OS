@@ -10,8 +10,8 @@ public interface GameCommand {
      */
     String execute(String[] args, GameState state);
 
-    /**
-     * Restituisce la descrizione da mostrare quando l'utente usa il comando "help".
-     */
+    String getCommandName();
+
     String getDescription();
+
 }

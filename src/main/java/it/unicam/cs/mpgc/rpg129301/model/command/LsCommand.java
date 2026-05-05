@@ -9,7 +9,7 @@ public class LsCommand implements GameCommand {
     @Override
     public String execute(String[] args, GameState state) {
 
-        // Controlla se inserito parametro per mostrare i file nascosti
+        // Check if the -a flag is present to show hidden files
         boolean showHidden = args.length > 0 && args[0].equals("-a");
         StringBuilder output = new StringBuilder();
 
@@ -18,16 +18,21 @@ public class LsCommand implements GameCommand {
             boolean isHidden = (child instanceof GameFile) && ((GameFile) child).isHidden();
 
             if (showHidden || !isHidden) {
-                // Per dare l'effetto visivo di Linux, aggiunto un punto al nome dei file nascosti
+                // Add a dot prefix for hidden files to visually distinguish them
                 String displayName = isHidden ? "." + child.getName() : child.getName();
 
-                // Formattazione per distinguere file e cartelle
+                // Add a type prefix to indicate if it's a directory or a file
                 String typePrefix = (child instanceof GameDirectory) ? "[DIR]  " : "[FILE] ";
                 output.append(typePrefix).append(displayName).append("\n");
             }
         }
 
         return output.toString().trim();
+    }
+
+    @Override
+    public String getCommandName() {
+        return "ls";
     }
 
     @Override

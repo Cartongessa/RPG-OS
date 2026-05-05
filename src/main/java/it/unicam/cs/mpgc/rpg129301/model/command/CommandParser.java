@@ -1,6 +1,5 @@
 package it.unicam.cs.mpgc.rpg129301.model.command;
 
-
 import it.unicam.cs.mpgc.rpg129301.model.GameState;
 import java.util.Arrays;
 import java.util.HashMap;

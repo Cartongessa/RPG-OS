@@ -24,21 +24,21 @@ public class CdCommand implements GameCommand {
             }
         }
 
-        // Ricerca nella mappa
         FileSystemNode targetNode = currentDir.getChild(targetName);
 
-        // Verifiche di sicurezza
         if (targetNode instanceof GameDirectory) {
-            // Se è una cartella: entra e aggiorna lo stato
             state.setCurrentDirectory((GameDirectory) targetNode);
             return "";
         } else if (targetNode != null) {
-            // Esiste, ma è un file
             return "Errore: '" + targetName + "' e' un file, non una cartella.";
         } else {
-            // Non esiste
             return "Errore: nessuna directory trovata con il nome '" + targetName + "'.";
         }
+    }
+
+    @Override
+    public String getCommandName() {
+        return "cd";
     }
 
     @Override
