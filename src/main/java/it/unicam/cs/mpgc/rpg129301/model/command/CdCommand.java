@@ -8,7 +8,7 @@ public class CdCommand implements GameCommand {
     @Override
     public String execute(String[] args, GameState state) {
         if (args.length == 0) {
-            return "Errore: specificare il nome di una cartella (o '..').";
+            return "Error: specify the name of the directory (or '..').";
         }
 
         String targetName = args[0];
@@ -20,7 +20,7 @@ public class CdCommand implements GameCommand {
                 state.setCurrentDirectory(currentDir.getParent());
                 return "";
             } else {
-                return "Errore: sei già nella directory radice (/).";
+                return "Error: you already are in root (/).";
             }
         }
 
@@ -30,9 +30,9 @@ public class CdCommand implements GameCommand {
             state.setCurrentDirectory((GameDirectory) targetNode);
             return "";
         } else if (targetNode != null) {
-            return "Errore: '" + targetName + "' e' un file, non una cartella.";
+            return "Error: '" + targetName + "' is a file, not a directory.";
         } else {
-            return "Errore: nessuna directory trovata con il nome '" + targetName + "'.";
+            return "Error: no directory found as '" + targetName + "'.";
         }
     }
 
@@ -42,7 +42,15 @@ public class CdCommand implements GameCommand {
     }
 
     @Override
+    public String getCommandUsage() {return " [dir]";}
+
+    @Override
     public String getDescription() {
-        return "cd [dir] : Cambia la directory corrente navigando nell'albero.";
+        return "Changes current directory.";
+    }
+
+    @Override
+    public String getBriefDescription() {
+        return "Changes current directory.";
     }
 }

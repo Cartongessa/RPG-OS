@@ -1,43 +1,52 @@
 package it.unicam.cs.mpgc.rpg129301.model;
 
-import it.unicam.cs.mpgc.rpg129301.model.command.CatCommand;
-import it.unicam.cs.mpgc.rpg129301.model.command.CdCommand;
-import it.unicam.cs.mpgc.rpg129301.model.command.CommandParser;
-import it.unicam.cs.mpgc.rpg129301.model.command.LsCommand;
+import it.unicam.cs.mpgc.rpg129301.model.command.*;
+import it.unicam.cs.mpgc.rpg129301.model.fs.FileSystemNode;
 import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
-import it.unicam.cs.mpgc.rpg129301.model.fs.GameFile;
+import it.unicam.cs.mpgc.rpg129301.utils.LevelLoader;
 
+/**
+ * Handles the initial setup of the game environment
+ */
 public class StartupEngine {
 
-    public GameDirectory fileSystemSetup() {
-        // --- FileSystem setup, temporarily static ---
-        GameDirectory root = new GameDirectory("/", null);
-        GameDirectory homeDir = new GameDirectory("home", root);
-        GameDirectory guestDir = new GameDirectory("guest", homeDir);
-        GameDirectory binDir = new GameDirectory("bin", root);
+    /**
+     * Loads the FileSystem from a JSON file and prepares the GameState
+     * @param levelIndex The index of the level
+     * @return A fully initialized GameState
+     */
+    public GameState setupGame(int levelIndex) {
+        LevelLoader loader = new LevelLoader();
+        GameDirectory root = loader.loadLevel(levelIndex);
 
-        GameDirectory startDir = guestDir;
+        try {
+            // 1. Get 'home' as a generic node
+            FileSystemNode homeNode = root.getChild("home");
 
-        root.addChild(homeDir);
-        root.addChild(binDir);
-        homeDir.addChild(guestDir);
+            // 2. Cast it to GameDirectory so we can use .getChild() again
+            if (homeNode instanceof GameDirectory homeDir) {
+                GameDirectory guest = (GameDirectory) homeDir.getChild("guest");
+                return new GameState(guest);
+            }
 
-        // Adding level files
-        guestDir.addChild(new GameFile("readme.txt", "Storia inutile del gioco...", false));
-        guestDir.addChild(new GameFile("passwords_backup", "user_target_pwd_123", true));
-
-        return startDir;
+            return new GameState(root);
+        } catch (Exception e) {
+            // Fallback to root if navigation fails
+            return new GameState(root);
+        }
     }
 
-    public CommandParser parserSetup() {
+    /**
+     * Registers all available commands into the CommandParser
+     * @return A configured CommandParser
+     */
+    public CommandParser setupParser() {
         CommandParser parser = new CommandParser();
-
         parser.register("ls", new LsCommand());
         parser.register("cd", new CdCommand());
         parser.register("cat", new CatCommand());
-
+        parser.register("help", new HelpCommand(parser.getRegisteredCommands()));
+        // Future commands like "hint" will be registered here
         return parser;
     }
-
-
 }

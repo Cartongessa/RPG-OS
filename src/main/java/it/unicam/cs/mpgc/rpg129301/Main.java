@@ -1,45 +1,42 @@
 package it.unicam.cs.mpgc.rpg129301;
 
-import it.unicam.cs.mpgc.rpg129301.model.StartupEngine;
-import it.unicam.cs.mpgc.rpg129301.model.command.*;
+import it.unicam.cs.mpgc.rpg129301.model.command.CommandParser;
 import it.unicam.cs.mpgc.rpg129301.model.GameState;
-import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
-
+import it.unicam.cs.mpgc.rpg129301.model.StartupEngine;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+     static void main() {
+         StartupEngine engine = new StartupEngine();
 
-        StartupEngine engine = new StartupEngine();
+         // Simply pass '1' to start Level 1
+         GameState state = engine.setupGame(1);
+         CommandParser parser = engine.setupParser();
 
-        GameDirectory startDir = engine.fileSystemSetup();
-        GameState state = new GameState(startDir);
-
-        CommandParser parser = engine.parserSetup();
-
-        // --- Game loop ---
         Scanner scanner = new Scanner(System.in);
-        System.out.println("=== THE GUEST ACCOUNT ===");
-        System.out.println("Connessione stabilita. Digita 'exit' per uscire.\n");
+        System.out.println("=== RPG-OS TERMINAL v1.0 ===");
+        System.out.println("Type 'exit' to terminate the session.\n");
 
+        // Main Game Loop
         while (true) {
-            // prompt: nomeutente@rpg:cartella_attuale$
-            System.out.print("guest@rpg:" + state.getCurrentDirectory().getName() + "$ ");
+            // Dynamic prompt showing the current directory name
+            System.out.print("user@rpg-os:" + state.getCurrentDirectory().getName() + "$ ");
 
+            if (!scanner.hasNextLine()) break;
             String input = scanner.nextLine();
 
-            if (input.equalsIgnoreCase("exit") || input.equalsIgnoreCase("quit")) {
-                System.out.println("Disconnessione dal sistema in corso...");
-                break;
-            }
+            if (input.equalsIgnoreCase("exit")) break;
 
-            String output = parser.process(input, state);
+            // Process the input through the router
+            String response = parser.process(input, state);
 
-            if (!output.isEmpty()) {
-                System.out.println(output);
+            // Print the response if it's not empty
+            if (!response.isEmpty()) {
+                System.out.println(response);
             }
         }
 
+        System.out.println("Closing connection...");
         scanner.close();
     }
 }

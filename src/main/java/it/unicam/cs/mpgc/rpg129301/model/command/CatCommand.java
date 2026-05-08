@@ -9,7 +9,7 @@ public class CatCommand implements GameCommand {
     @Override
     public String execute(String[] args, GameState state) {
         if (args.length == 0) {
-            return "Errore: specificare il nome di una cartella (o '..').";
+            return "Error: specify the name of a file.";
         }
 
         String targetName = args[0];
@@ -18,9 +18,9 @@ public class CatCommand implements GameCommand {
         FileSystemNode targetNode = currentDir.getChild(targetName);
 
         if (targetNode == null) {
-            return "Errore: nessun file trovato con il nome '" + targetName + "'.";
+            return "Error: no file found as '" + targetName + "'.";
         } else if (targetNode instanceof GameDirectory) {
-            return "Errore: '" + targetName + "' e' una cartella, non un file.";
+            return "Error: '" + targetName + "' is a directory, not a file.";
         } else {
             return ((GameFile) targetNode).getContent();
         }
@@ -32,7 +32,17 @@ public class CatCommand implements GameCommand {
     }
 
     @Override
+    public String getCommandUsage() {
+        return " [file]";
+    }
+
+    @Override
     public String getDescription() {
-        return "cat [file] : Mostra il contenuto di un file.";
+        return "Shows the content of a file.";
+    }
+
+    @Override
+    public String getBriefDescription() {
+        return "Shows the content of a file.";
     }
 }

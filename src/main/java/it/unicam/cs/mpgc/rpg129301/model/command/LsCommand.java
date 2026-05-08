@@ -36,7 +36,18 @@ public class LsCommand implements GameCommand {
     }
 
     @Override
+    public String getCommandUsage() {
+        return " [-a]";
+    }
+
+    @Override
     public String getDescription() {
-        return "ls [-a] : Mostra il contenuto della directory corrente.";
+        return "Lists files in the current directory. \n" +
+                "Use -a to show hidden files.";
+    }
+
+    @Override
+    public String getBriefDescription() {
+        return "Lists files in the current directory.";
     }
 }

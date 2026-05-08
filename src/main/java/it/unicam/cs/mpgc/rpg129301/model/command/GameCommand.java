@@ -4,14 +4,18 @@ import it.unicam.cs.mpgc.rpg129301.model.GameState;
 
 public interface GameCommand {
     /**
-     * Esegue il comando e restituisce l'output da mostrare nel terminale del gioco.
-     * @param args Gli argomenti passati (es. se scrivo "cd logs", args[0] è "logs")
-     * @param state Lo stato attuale del gioco (per sapere dove siamo)
+     * Executes the command and returns the output to be shown in the game's terminal
+     * @param args The arguments passed to the command (e.g. for "ls -a", args would be ["-a"])
+     * @param state The current state of the game
      */
     String execute(String[] args, GameState state);
 
     String getCommandName();
 
+    String getCommandUsage();
+
     String getDescription();
+
+    String getBriefDescription();
 
 }

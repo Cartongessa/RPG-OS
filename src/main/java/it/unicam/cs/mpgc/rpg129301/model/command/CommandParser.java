@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandParser {
-
     private final Map<String, GameCommand> commands = new HashMap<>();
 
     public void register(String name, GameCommand command) {
-        commands.put(name.toLowerCase(), command);
+        commands.put(name, command);
+    }
+
+    public Map<String, GameCommand> getRegisteredCommands() {
+        return this.commands;
     }
 
     public String process(String input, GameState state) {
@@ -19,7 +22,7 @@ public class CommandParser {
             return "";
         }
 
-        // "ls -a" diventa ["ls", "-a"]
+        // "ls -a" becomes ["ls", "-a"]
         String[] parts = input.trim().split("\\s+");
         String commandName = parts[0].toLowerCase();
 
@@ -29,7 +32,7 @@ public class CommandParser {
             String[] args = Arrays.copyOfRange(parts, 1, parts.length);
             return cmd.execute(args, state);
         } else {
-            return "Comando non trovato: '" + commandName + "'.";
+            return "Command not found: '" + commandName + "'.";
         }
     }
 }
