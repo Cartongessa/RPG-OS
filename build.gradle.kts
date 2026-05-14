@@ -4,7 +4,7 @@ plugins {
 }
 
 javafx {
-    version = "21"
+    version = "25"
     modules("javafx.controls", "javafx.fxml")
 }
 
@@ -20,7 +20,6 @@ repositories {
     maven("https://jitpack.io")
 }
 
-
 dependencies {
     testImplementation(platform("org.junit:junit-bom:6.0.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -31,14 +30,6 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
-
-//sourceSets {
-//    main {
-//        resources {
-//            srcDir("src/main/java")
-//        }
-//    }
-//}
 
 tasks.withType<JavaExec> {
     standardInput = System.`in`
