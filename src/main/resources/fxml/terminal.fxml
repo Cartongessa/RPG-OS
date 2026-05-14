@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.unicam.cs.mpgc.rpg129301.view.TerminalController">
+
+<TextArea fx:id="terminalOutput" VBox.vgrow="ALWAYS" editable="false"
+          style="-fx-control-inner-background: black; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+
+<TextField fx:id="commandInput" onAction="#handleCommand"
+           style="-fx-background-color: #333; -fx-text-fill: white; -fx-font-family: 'Courier New';" />
+</VBox>
