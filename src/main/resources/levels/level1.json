@@ -1,0 +1,49 @@
+{
+  "levelIndex": 1,
+  "startingAccount": "guest",
+  "fileSystem": {
+    "name": "/",
+    "type": "directory",
+    "children": {
+      "bin": {
+        "name": "bin",
+        "type": "directory",
+        "children": {
+          "ls": { "name": "ls", "type": "file", "content": "Binary executable for listing files", "isHidden": false },
+          "cat": { "name": "cat", "type": "file", "content": "Binary executable for reading files", "isHidden": false }
+        }
+      },
+      "etc": {
+        "name": "etc",
+        "type": "directory",
+        "children": {
+          "hostname": { "name": "hostname", "type": "file", "content": "rpg-os-v1", "isHidden": false }
+        }
+      },
+      "home": {
+        "name": "home",
+        "type": "directory",
+        "children": {
+          "guest": {
+            "name": "guest",
+            "type": "directory",
+            "children": {
+              "readme.txt": {
+                "name": "readme.txt",
+                "type": "file",
+                "content": "The quick fox jumps over the lazy dog",
+                "isHidden": false
+              },
+              "passwords_backup": {
+                "name": "passwords_backup",
+                "type": "file",
+                "content": "target_user_pwd: hacker_access_404",
+                "isHidden": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

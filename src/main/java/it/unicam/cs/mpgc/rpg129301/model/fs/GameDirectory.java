@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameDirectory extends FileSystemNode {
-    private GameDirectory parent;
     private Map<String, FileSystemNode> children;
 
-    public GameDirectory(String name, GameDirectory parent) {
+    public GameDirectory(String name) {
         super(name);
-        this.parent = parent;
         this.children = new HashMap<>();
     }
 
@@ -23,13 +21,5 @@ public class GameDirectory extends FileSystemNode {
 
     public Map<String, FileSystemNode> getChildren() {
         return children;
-    }
-
-    public GameDirectory getParent() {
-        return parent;
-    }
-
-    public void setParent(GameDirectory parent) {
-        this.parent = parent;
     }
 }

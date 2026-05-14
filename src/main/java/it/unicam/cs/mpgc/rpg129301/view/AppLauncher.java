@@ -5,7 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class AppLauncher extends Application {
+    /**
+     * The main entry point for all JavaFX applications. The start method is called after the init method has returned.
+     * @param primaryStage the primary stage for this application, onto which the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be primary stages.
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/terminal.fxml"));

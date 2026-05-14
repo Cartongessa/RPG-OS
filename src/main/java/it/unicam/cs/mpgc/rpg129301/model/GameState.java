@@ -4,9 +4,11 @@ import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
 
 public class GameState {
     private GameDirectory currentDirectory;
+    private String currentUser;
 
-    public GameState(GameDirectory startDirectory) {
+    public GameState(GameDirectory startDirectory, String startingUser) {
         this.currentDirectory = startDirectory;
+        this.currentUser = startingUser;
     }
 
     public GameDirectory getCurrentDirectory() {
@@ -15,5 +17,9 @@ public class GameState {
 
     public void setCurrentDirectory(GameDirectory currentDirectory) {
         this.currentDirectory = currentDirectory;
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
     }
 }

@@ -1,82 +1,58 @@
 package it.unicam.cs.mpgc.rpg129301.utils;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.unicam.cs.mpgc.rpg129301.model.fs.FileSystemNode;
 import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
-import it.unicam.cs.mpgc.rpg129301.model.fs.GameFile;
-
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Type;
-import java.util.Objects;
 
 public class LevelLoader {
 
-    private final Gson gson;
+    /**
+     * Loads the required level by index from the resources folder and returns its data as a LevelData object.
+     * @param levelIndex The index of the level to load (e.g., 1 for "level1.json")
+     * @return The LevelData object containing the level's file system and starting account
+     */
+    public LevelData loadLevel(int levelIndex) {
+        String path = "/levels/level" + levelIndex + ".json";
 
-    public LevelLoader() {
-        // The deserializer looks at "type"
-        JsonDeserializer<FileSystemNode> deserializer = (json, typeOfT, context) -> {
-            JsonObject jsonObject = json.getAsJsonObject();
-            String type = jsonObject.get("type").getAsString();
+        try (InputStream is = getClass().getResourceAsStream(path)) {
+            if (is == null) throw new IllegalArgumentException("File not found: " + path);
 
-            if ("directory".equals(type)) {
-                return context.deserialize(json, GameDirectory.class);
-            } else if ("file".equals(type)) {
-                return context.deserialize(json, GameFile.class);
+            Reader reader = new InputStreamReader(is);
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(FileSystemNode.class, new FileSystemNodeDeserializer())
+                    .create();
+
+            LevelData levelData = gson.fromJson(reader, LevelData.class);
+
+            if (levelData != null && levelData.getFileSystem() != null) {
+                // Root has not got any parent
+                linkParents(levelData.getFileSystem(), null);
             }
-            throw new JsonParseException("Unknown type of node: " + type);
-        };
 
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(FileSystemNode.class, deserializer)
-                .create();
-    }
+            return levelData;
 
-    /**
-     * Loads a level based on its path
-     * @param resourcePath The relative path to the level
-     * @return The root directory of the loaded level
-     */
-    private GameDirectory loadLevel(String resourcePath) {
-        try (Reader reader = new InputStreamReader(
-                Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(resourcePath)))) {
-
-            GameDirectory root = gson.fromJson(reader, GameDirectory.class);
-            restoreParents(root);
-            return root;
         } catch (Exception e) {
-            throw new RuntimeException("Error while loading the level: " + resourcePath, e);
+            System.err.println("Error while loading level " + levelIndex + ": " + e.getMessage());
+            return null;
         }
     }
 
     /**
-     * Loads a level based on its index
-     * Maps index '1' to 'level1.json'
-     * @param levelIndex The integer index of the level
-     * @return The root directory of the loaded level
+     * Recursive function to set the parent reference for each node in the file system tree.
+     * @param node The current node
+     * @param parent The parent of the current node (null for the root)
      */
-    public GameDirectory loadLevel(int levelIndex) {
-        String fileName = "level" + levelIndex + ".json";
+    private void linkParents(FileSystemNode node, GameDirectory parent) {
+        node.setParent(parent);
 
-        // Verify if the resource exists before attempting to read
-        if (getClass().getClassLoader().getResource(fileName) == null) {
-            throw new IllegalArgumentException("Level file not found: " + fileName);
-        }
-
-        return loadLevel(fileName); // Reuse the existing String-based loading logic
-    }
-
-    /**
-     * Recursively restores parent references in the directory tree
-     * @param currentDir The current directory to process
-     */
-    private void restoreParents(GameDirectory currentDir) {
-        if (currentDir.getChildren() == null) return;
-        for (FileSystemNode child : currentDir.getChildren().values()) {
-            if (child instanceof GameDirectory childDir) {
-                childDir.setParent(currentDir);
-                restoreParents(childDir);
+        // If this node is a directory, do the same for its children
+        if (node instanceof GameDirectory dir) {
+            for (FileSystemNode child : dir.getChildren().values()) {
+                linkParents(child, dir);
             }
         }
     }

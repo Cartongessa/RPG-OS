@@ -36,6 +36,9 @@ public class TerminalController {
     private GameState state;
     private CommandParser parser;
 
+    /**
+     * Initializes the terminal by setting up the game state and command parser, and displays the initial prompt.
+     */
     @FXML
     public void initialize() {
         StartupEngine engine = new StartupEngine();
@@ -49,22 +52,39 @@ public class TerminalController {
 
         this.state = state;
         this.parser = parser;
+
+        terminalOutput.appendText(buildPrompt());
     }
 
+    /**
+     * Handles the command entered by the user, processes it through the CommandParser, and updates the terminal output.
+     */
     @FXML
     public void handleCommand() {
-
         String input = commandInput.getText();
 
         if (input.equalsIgnoreCase("exit")) {
             System.exit(0);
         }
+        
+        terminalOutput.appendText(input + "\n");
 
         String response = parser.process(input, state);
 
-        terminalOutput.appendText("user@rpg-os:" + state.getCurrentDirectory().getName() + "$ " + input + "\n");
-        terminalOutput.appendText(response + "\n");
+        if (response != null && !response.isEmpty()) {
+            terminalOutput.appendText(response + "\n");
+        }
+
+        terminalOutput.appendText(buildPrompt());
 
         commandInput.clear();
+    }
+
+    /**
+     * Builds the terminal prompt based on the current user and directory in the GameState
+     * @return A string representing the terminal prompt (e.g., "guest@rpg-os:home$ ")
+     */
+    private String buildPrompt() {
+        return state.getCurrentUser() + "@rpg-os:" + state.getCurrentDirectory().getName() + "$ ";
     }
 }

@@ -4,6 +4,7 @@ import it.unicam.cs.mpgc.rpg129301.model.command.*;
 import it.unicam.cs.mpgc.rpg129301.model.fs.FileSystemNode;
 import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
 import it.unicam.cs.mpgc.rpg129301.utils.LevelLoader;
+import it.unicam.cs.mpgc.rpg129301.utils.LevelData;
 
 /**
  * Handles the initial setup of the game environment
@@ -17,22 +18,29 @@ public class StartupEngine {
      */
     public GameState setupGame(int levelIndex) {
         LevelLoader loader = new LevelLoader();
-        GameDirectory root = loader.loadLevel(levelIndex);
+
+        LevelData levelData = loader.loadLevel(levelIndex);
+
+        GameDirectory root = levelData.getFileSystem();
+        String startAccount = levelData.getStartingAccount();
 
         try {
-            // 1. Get 'home' as a generic node
             FileSystemNode homeNode = root.getChild("home");
 
-            // 2. Cast it to GameDirectory so we can use .getChild() again
             if (homeNode instanceof GameDirectory homeDir) {
-                GameDirectory guest = (GameDirectory) homeDir.getChild("guest");
-                return new GameState(guest);
+                FileSystemNode startNode = homeDir.getChild(startAccount);
+
+                if (startNode instanceof GameDirectory startingDir) {
+                    return new GameState(startingDir, startAccount);
+                }
             }
 
-            return new GameState(root);
+            // If user directory is not found, start from root as "root"
+            return new GameState(root, "root");
+
         } catch (Exception e) {
-            // Fallback to root if navigation fails
-            return new GameState(root);
+            System.err.println("Error while setting up the starting directory: " + e.getMessage());
+            return new GameState(root, "root");
         }
     }
 
