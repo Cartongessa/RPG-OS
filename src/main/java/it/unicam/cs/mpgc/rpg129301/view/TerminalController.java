@@ -78,6 +78,14 @@ public class TerminalController {
         terminalOutput.appendText(buildPrompt());
 
         commandInput.clear();
+
+        if (state.getObjective() != null && state.getObjective().isCompleted(state)) {
+            terminalOutput.appendText("\n[SYSTEM]: Objective completed! " + state.getObjective().getSuccessMessage() + "\n");
+        }
+
+        if (input.equalsIgnoreCase("objective done")) {
+            terminalOutput.appendText("\n[SYSTEM]: Objective completed! " + state.getObjective().getSuccessMessage() + "\n");
+        }
     }
 
     /**

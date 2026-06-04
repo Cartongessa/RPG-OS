@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.unicam.cs.mpgc.rpg129301.model.fs.FileSystemNode;
 import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
+import it.unicam.cs.mpgc.rpg129301.model.objectives.Objective;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -24,6 +26,7 @@ public class LevelLoader {
             Reader reader = new InputStreamReader(is);
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(FileSystemNode.class, new FileSystemNodeDeserializer())
+                    .registerTypeAdapter(Objective.class, new ObjectiveDeserializer())
                     .create();
 
             LevelData levelData = gson.fromJson(reader, LevelData.class);

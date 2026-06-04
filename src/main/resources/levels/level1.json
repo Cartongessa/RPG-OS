@@ -1,6 +1,16 @@
 {
   "levelIndex": 1,
   "startingAccount": "guest",
+  "objective": {
+    "type": "change_user",
+    "targetUser": "hacker"
+  },
+  "accounts": {
+    "guest": "",
+    "hacker": "hacker_404",
+    "root": "Admin129301"
+  },
+  "objectiveDescription": "Find the hidden password in the file system and use it to access the target user account.",
   "fileSystem": {
     "name": "/",
     "type": "directory",
@@ -35,9 +45,9 @@
                 "isHidden": false
               },
               "passwords_backup": {
-                "name": "passwords_backup",
+                "name": "passwords_backup.txt",
                 "type": "file",
-                "content": "target_user_pwd: hacker_access_404",
+                "content": "target_user_pwd: hacker_404",
                 "isHidden": true
               }
             }
