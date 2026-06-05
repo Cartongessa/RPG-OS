@@ -37,7 +37,7 @@ public class TerminalController {
     private CommandParser parser;
 
     /**
-     * Initializes the terminal by setting up the game state and command parser, and displays the initial prompt.
+     * Initializes the terminal by setting up the game state and command parser, and displays the initial prompt
      */
     @FXML
     public void initialize() {
@@ -59,43 +59,75 @@ public class TerminalController {
     }
 
     /**
-     * Handles the command entered by the user, processes it through the CommandParser, and updates the terminal output.
+     * Handles the command entered by the user, processes it through the CommandParser, and updates the terminal output
      */
     @FXML
     public void handleCommand() {
-        // Get the input
-        String input = commandInput.getText();
 
-        // If the input is "exit", close the app
+        String input = commandInput.getText().trim();
+
+        if (input.isEmpty()) return;
+
+        commandInput.clear();
+
         if (input.equalsIgnoreCase("exit")) {
             System.exit(0);
         }
 
-        // Append input to the terminal
-        terminalOutput.appendText(input + "\n");
+        // Show the user's input
+        printToTerminal(input);
 
-        // Save the log
-        state.setCurrentLog(terminalOutput.getText());
-
-        // Process the command and get the response
+        // Process the command
         String response = parser.process(input, state);
 
-        if (response != null && !response.isEmpty()) {
-            terminalOutput.appendText(response + "\n");
+        // Handle response
+        handleCommandResponse(response);
+
+        // Post-command check for objectives
+        checkObjectives();
+
+        // Log state and prepare for next input
+        endTurn();
+    }
+
+    /**
+     * Appends text to the terminal UI, ensuring that each new message starts on a new line
+     */
+    private void printToTerminal(String text) {
+        terminalOutput.appendText(text + "\n");
+    }
+
+    /**
+     * Handles text responses and special system flags (like "[LOAD_SUCCESS]")
+     */
+    private void handleCommandResponse(String response) {
+        // If the response is the special flag [LOAD_SUCCESS], refresh the terminal
+        if ("[LOAD_SUCCESS]".equals(response)) {
+            terminalOutput.setText(state.getCurrentLog());
+            printToTerminal("\n[SYSTEM]: Game loaded successfully.");
+        } else if (response != null && !response.isEmpty()) {
+            printToTerminal(response);
         }
+    }
 
-        terminalOutput.appendText(buildPrompt());
-
-        commandInput.clear();
-
+    /**
+     * Checks if the current objective is met and notifies the user if it is completed
+     */
+    private void checkObjectives() {
         if (state.getObjective() != null && state.getObjective().isCompleted(state)) {
-            terminalOutput.appendText("\n[SYSTEM]: Objective completed! " + state.getObjective().getSuccessMessage() + "\n");
+            printToTerminal("\n[SYSTEM]: Objective completed! " + state.getObjective().getSuccessMessage());
         }
+    }
 
-        // Feature for debugging
-        if (input.equalsIgnoreCase("objective done")) {
-            terminalOutput.appendText("\n[SYSTEM]: Objective completed! " + state.getObjective().getSuccessMessage() + "\n");
-        }
+    /**
+     * Syncs the game state and prints the next prompt.
+     */
+    private void endTurn() {
+        // Sync the log in the state so manual saves will capture everything
+        state.setCurrentLog(terminalOutput.getText());
+
+        // Print the next prompt ready for the user
+        terminalOutput.appendText(buildPrompt());
     }
 
     /**
