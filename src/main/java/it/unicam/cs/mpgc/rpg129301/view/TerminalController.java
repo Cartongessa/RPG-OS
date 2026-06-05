@@ -43,16 +43,18 @@ public class TerminalController {
     public void initialize() {
         StartupEngine engine = new StartupEngine();
 
+        // Set up the game state and command parser
         GameState state = engine.setupGame(1);
         CommandParser parser = engine.setupParser();
 
-        // print the title
+        // Print the title
         terminalOutput.appendText("=== RPG-OS TERMINAL v2.0 ===\n");
         terminalOutput.appendText("Type 'exit' to terminate the session.\n\n");
 
         this.state = state;
         this.parser = parser;
 
+        // Print the first prompt
         terminalOutput.appendText(buildPrompt());
     }
 
@@ -61,14 +63,21 @@ public class TerminalController {
      */
     @FXML
     public void handleCommand() {
+        // Get the input
         String input = commandInput.getText();
 
+        // If the input is "exit", close the app
         if (input.equalsIgnoreCase("exit")) {
             System.exit(0);
         }
-        
+
+        // Append input to the terminal
         terminalOutput.appendText(input + "\n");
 
+        // Save the log
+        state.setCurrentLog(terminalOutput.getText());
+
+        // Process the command and get the response
         String response = parser.process(input, state);
 
         if (response != null && !response.isEmpty()) {
@@ -83,6 +92,7 @@ public class TerminalController {
             terminalOutput.appendText("\n[SYSTEM]: Objective completed! " + state.getObjective().getSuccessMessage() + "\n");
         }
 
+        // Feature for debugging
         if (input.equalsIgnoreCase("objective done")) {
             terminalOutput.appendText("\n[SYSTEM]: Objective completed! " + state.getObjective().getSuccessMessage() + "\n");
         }

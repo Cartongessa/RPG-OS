@@ -41,3 +41,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Ignore the saves directory and everything inside it ###
+saves/

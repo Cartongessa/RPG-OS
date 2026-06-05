@@ -30,17 +30,13 @@ public class StartupEngine {
 
         try {
             FileSystemNode homeNode = root.getChild("home");
-
             if (homeNode instanceof GameDirectory homeDir) {
                 FileSystemNode startNode = homeDir.getChild(startAccount);
-
                 if (startNode instanceof GameDirectory startingDir) {
-                    return new GameState(startingDir, startAccount, levelData.getObjective(), accounts);
+                    return new GameState(startingDir, startAccount, levelData.getObjective(), accounts, levelIndex);
                 }
             }
-
             return createFallbackState(root);
-
         } catch (Exception e) {
             System.err.println("Error while setting up the starting directory: " + e.getMessage());
             return createFallbackState(root);
@@ -53,8 +49,7 @@ public class StartupEngine {
     private GameState createFallbackState(GameDirectory root) {
         Map<String, String> fallbackAccounts = new HashMap<>();
         fallbackAccounts.put("root", "admin");
-
-        return new GameState(root, "root", null, fallbackAccounts);
+        return new GameState(root, "root", null, fallbackAccounts, 1);
     }
 
     /**
@@ -63,11 +58,13 @@ public class StartupEngine {
      */
     public CommandParser setupParser() {
         CommandParser parser = new CommandParser();
+
         parser.register("ls", new LsCommand());
         parser.register("cd", new CdCommand());
         parser.register("cat", new CatCommand());
         parser.register("help", new HelpCommand(parser.getRegisteredCommands()));
         parser.register("login", new LoginCommand());
+        parser.register("save", new SaveCommand());
 
         // Future commands like "hint" will be registered here
         return parser;

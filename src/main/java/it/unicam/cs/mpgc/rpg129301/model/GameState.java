@@ -10,12 +10,24 @@ public class GameState {
     private Objective currentObjective;
     private Map<String, String> accounts;
 
-    public GameState(GameDirectory startDirectory, String startingUser, Objective currentObjective, Map<String, String> accounts) {
+    // Fields used for saving feature
+    private int levelIndex;
+    private String currentLog;
+
+    public GameState(GameDirectory startDirectory, String startingUser, Objective currentObjective, Map<String, String> accounts, int levelIndex) {
         this.currentDirectory = startDirectory;
         this.currentUser = startingUser;
         this.currentObjective = currentObjective;
         this.accounts = accounts;
+        this.levelIndex = levelIndex;
+        this.currentLog = "";
     }
+
+    public int getLevelIndex() { return levelIndex; }
+    public void setLevelIndex(int levelIndex) { this.levelIndex = levelIndex; }
+
+    public String getCurrentLog() { return currentLog; }
+    public void setCurrentLog(String currentLog) { this.currentLog = currentLog; }
 
     public Map<String, String> getAccounts() {
         return accounts;
