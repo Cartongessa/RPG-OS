@@ -65,6 +65,7 @@ public class StartupEngine {
         parser.register("help", new HelpCommand(parser.getRegisteredCommands()));
         parser.register("login", new LoginCommand());
         parser.register("save", new SaveCommand());
+        parser.register("load", new LoadCommand());
 
         // Future commands like "hint" will be registered here
         return parser;
