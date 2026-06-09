@@ -18,23 +18,30 @@ public class LoadCommand implements GameCommand {
 
     @Override
     public String execute(String[] args, GameState state) {
+        // If there is not any argument, save the file as savegame.json
         String fileName = args.length > 0 ? args[0] : "savegame.json";
+
+        // If the provided filename does not end with .json, append it
         if (args.length > 0 && !fileName.endsWith(".json")) {
             fileName += ".json";
         }
 
-        // Identify the input as a file
+        // Identify the input as a file in the "saves" directory
         File saveFile = new File("saves", fileName);
 
+        // If the file does not exist, return an error message
         if (!saveFile.exists()) {
             return "[ERROR]: Save file '" + fileName + "' does not exist.";
         }
 
         Gson gson = new Gson();
 
+
         try (FileReader reader = new FileReader(saveFile)) {
+            // Create a variable with all the data from the JSON file
             SaveGameData loadedData = gson.fromJson(reader, SaveGameData.class);
 
+            // Set the state to the parameters found in the file
             state.setLevelIndex(loadedData.levelIndex);
             state.setCurrentLog(loadedData.log);
 
@@ -42,6 +49,7 @@ public class LoadCommand implements GameCommand {
             GameDirectory currentDir = state.getCurrentDirectory();
             GameDirectory targetDirectory = currentDir.getRoot().findDirectoryByName(loadedData.currentPosition);
 
+            // If the directory exists, set it as the current directory, otherwise return an error message
             if (targetDirectory != null) {
                 state.setCurrentDirectory(targetDirectory);
             } else {

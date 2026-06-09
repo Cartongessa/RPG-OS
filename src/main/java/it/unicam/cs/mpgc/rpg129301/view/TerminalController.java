@@ -106,6 +106,7 @@ public class TerminalController {
             terminalOutput.setText(state.getCurrentLog());
             printToTerminal("\n[SYSTEM]: Game loaded successfully.");
         } else if (response != null && !response.isEmpty()) {
+            // Otherwise print the response, if not null or empty
             printToTerminal(response);
         }
     }

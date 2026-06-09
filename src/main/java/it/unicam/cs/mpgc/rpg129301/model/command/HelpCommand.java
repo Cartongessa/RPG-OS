@@ -29,6 +29,7 @@ public class HelpCommand implements GameCommand {
         // Case 2: list all
         StringBuilder sb = new StringBuilder();
         sb.append("Available commands:\n");
+        // Create a string with all commands and their brief descriptions
         for (Map.Entry<String, GameCommand> entry : commands.entrySet()) {
             sb.append(entry.getValue().getCommandName()).append(entry.getValue().getCommandUsage()).append(": ").append(entry.getValue().getBriefDescription()).append("\n");
         }

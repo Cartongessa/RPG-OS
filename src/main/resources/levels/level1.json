@@ -10,7 +10,7 @@
     "hacker": "hacker_404",
     "root": "Admin129301"
   },
-  "objectiveDescription": "Find the hidden password in the file system and use it to access the target user account.",
+  "objectiveDescription": "Find the hidden password in the file system and use it to access the target user account",
   "fileSystem": {
     "name": "/",
     "type": "directory",
@@ -47,7 +47,7 @@
               "passwords_backup": {
                 "name": "passwords_backup.txt",
                 "type": "file",
-                "content": "target_user_pwd: hacker_404",
+                "content": "Here is my account: 'hacker' password: 'hacker_404'",
                 "isHidden": true
               }
             }

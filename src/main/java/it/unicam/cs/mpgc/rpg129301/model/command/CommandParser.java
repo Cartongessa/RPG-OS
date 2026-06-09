@@ -18,16 +18,19 @@ public class CommandParser {
 
     public String process(String input, GameState state) {
 
+        // If there is no input, return an empty string (no command to process)
         if (input == null || input.trim().isEmpty()) {
             return "";
         }
 
-        // "ls -a" becomes ["ls", "-a"]
+        // Divide the input in arguments: "ls -a" becomes ["ls", "-a"]
         String[] parts = input.trim().split("\\s+");
         String commandName = parts[0].toLowerCase();
 
+        // From commands list, get the correct command from the name
         GameCommand cmd = commands.get(commandName);
 
+        // If the command exists, execute it with the arguments (everything after the command name) and return the result
         if (cmd != null) {
             String[] args = Arrays.copyOfRange(parts, 1, parts.length);
             return cmd.execute(args, state);

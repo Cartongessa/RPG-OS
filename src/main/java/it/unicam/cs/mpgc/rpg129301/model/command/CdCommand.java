@@ -7,6 +7,8 @@ import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
 public class CdCommand implements GameCommand {
     @Override
     public String execute(String[] args, GameState state) {
+
+        // If there is not any argument
         if (args.length == 0) {
             return "Error: specify the name of the directory (or '..').";
         }
@@ -14,7 +16,7 @@ public class CdCommand implements GameCommand {
         String targetName = args[0];
         GameDirectory currentDir = state.getCurrentDirectory();
 
-        // Gestione cd ..
+        // If the target is '..', move to the parent directory if it exists, otherwise return an error message
         if (targetName.equals("..")) {
             if (currentDir.getParent() != null) {
                 state.setCurrentDirectory(currentDir.getParent());
@@ -26,6 +28,7 @@ public class CdCommand implements GameCommand {
 
         FileSystemNode targetNode = currentDir.getChild(targetName);
 
+        // If the specified node is a directory, change the current directory to it, otherwise return an error message
         if (targetNode instanceof GameDirectory) {
             state.setCurrentDirectory((GameDirectory) targetNode);
             return "";

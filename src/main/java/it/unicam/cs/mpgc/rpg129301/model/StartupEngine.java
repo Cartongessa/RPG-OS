@@ -21,17 +21,24 @@ public class StartupEngine {
     public GameState setupGame(int levelIndex) {
         LevelLoader loader = new LevelLoader();
 
+        // Loads a level by the index
         LevelData levelData = loader.loadLevel(levelIndex);
 
+        // Loads the root and the starting account
         GameDirectory root = levelData.getFileSystem();
         String startAccount = levelData.getStartingAccount();
 
+        // Loads all the accounts for the current level
         Map<String, String> accounts = levelData.getAccounts();
 
         try {
+            // Navigate to the starting directory based on the provided starting account
             FileSystemNode homeNode = root.getChild("home");
+            // If the node is a directory
             if (homeNode instanceof GameDirectory homeDir) {
+                // Find the starting directory by looking for the directory named as the starting account
                 FileSystemNode startNode = homeDir.getChild(startAccount);
+                // If the starting node is a directory, initialize the GameState with it
                 if (startNode instanceof GameDirectory startingDir) {
                     return new GameState(startingDir, startAccount, levelData.getObjective(), accounts, levelIndex);
                 }
@@ -45,10 +52,12 @@ public class StartupEngine {
 
     /**
      * Creates an emergency state in case loading fails
+     * @return A GameState with the root directory as the starting point, a single account "root" with password "admin", and no objective
      */
     private GameState createFallbackState(GameDirectory root) {
         Map<String, String> fallbackAccounts = new HashMap<>();
         fallbackAccounts.put("root", "admin");
+        // The fallback state will have the root directory as the starting point, with a single account "root" with password "admin", and won't have an objective
         return new GameState(root, "root", null, fallbackAccounts, 1);
     }
 

@@ -16,6 +16,7 @@ public class AppLauncher extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // Load the FXML file for the terminal view, create a scene with it, and set it on the primary stage
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/terminal.fxml"));
         Scene scene = new Scene(loader.load());
         primaryStage.setTitle("RPG-OS Terminal v2.0");

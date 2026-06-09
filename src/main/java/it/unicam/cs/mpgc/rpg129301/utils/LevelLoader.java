@@ -18,21 +18,28 @@ public class LevelLoader {
      * @return The LevelData object containing the level's file system and starting account
      */
     public LevelData loadLevel(int levelIndex) {
+        // Find the path for the level from the index
         String path = "/levels/level" + levelIndex + ".json";
 
+        // Looks for the file in the resources folder, and if found, deserializes it to a LevelData object
         try (InputStream is = getClass().getResourceAsStream(path)) {
+
             if (is == null) throw new IllegalArgumentException("File not found: " + path);
 
+            // Creates a new Gson instance with custom deserializers for FileSystemNode and Objective, then deserializes the JSON data
             Reader reader = new InputStreamReader(is);
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(FileSystemNode.class, new FileSystemNodeDeserializer())
                     .registerTypeAdapter(Objective.class, new ObjectiveDeserializer())
                     .create();
 
+            // Loads the level data from the reader
             LevelData levelData = gson.fromJson(reader, LevelData.class);
 
+
             if (levelData != null && levelData.getFileSystem() != null) {
-                // Root has not got any parent
+                // Initialize the file system tree by recursively linking all nodes to their parents
+                // Pass 'null' as the parent for the root directory, as it has not got any parent
                 linkParents(levelData.getFileSystem(), null);
             }
 
@@ -50,6 +57,7 @@ public class LevelLoader {
      * @param parent The parent of the current node (null for the root)
      */
     private void linkParents(FileSystemNode node, GameDirectory parent) {
+        // Set the parent for the node
         node.setParent(parent);
 
         // If this node is a directory, do the same for its children

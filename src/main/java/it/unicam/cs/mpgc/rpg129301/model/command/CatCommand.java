@@ -8,15 +8,18 @@ import it.unicam.cs.mpgc.rpg129301.model.fs.GameFile;
 public class CatCommand implements GameCommand {
     @Override
     public String execute(String[] args, GameState state) {
+        // If there is not any argument
         if (args.length == 0) {
             return "Error: specify the name of a file.";
         }
 
+        // Get the name of the file
         String targetName = args[0];
 
         GameDirectory currentDir = state.getCurrentDirectory();
         FileSystemNode targetNode = currentDir.getChild(targetName);
 
+        // If no file is found with that name, or if the found node is a directory instead of a file, else return the content
         if (targetNode == null) {
             return "Error: no file found as '" + targetName + "'.";
         } else if (targetNode instanceof GameDirectory) {
