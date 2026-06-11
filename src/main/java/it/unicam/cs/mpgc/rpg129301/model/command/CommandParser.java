@@ -6,36 +6,52 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandParser {
-    private final Map<String, GameCommand> commands = new HashMap<>();
+
+    private final Map<String, GameCommand> commands;
+
+    public CommandParser() {
+        this.commands = new HashMap<>();
+    }
 
     public void register(String name, GameCommand command) {
-        commands.put(name, command);
+        this.commands.put(name.toLowerCase(), command);
     }
 
     public Map<String, GameCommand> getRegisteredCommands() {
         return this.commands;
     }
 
+    /**
+     * Processes the raw input string from the terminal.
+     */
     public String process(String input, GameState state) {
-
-        // If there is no input, return an empty string (no command to process)
         if (input == null || input.trim().isEmpty()) {
             return "";
         }
 
-        // Divide the input in arguments: "ls -a" becomes ["ls", "-a"]
+        // Split the input into the command and its arguments
         String[] parts = input.trim().split("\\s+");
         String commandName = parts[0].toLowerCase();
 
-        // From commands list, get the correct command from the name
-        GameCommand cmd = commands.get(commandName);
+        GameCommand command = this.commands.get(commandName);
 
-        // If the command exists, execute it with the arguments (everything after the command name) and return the result
-        if (cmd != null) {
+        if (command != null) {
+            // Command exists, execute it
             String[] args = Arrays.copyOfRange(parts, 1, parts.length);
-            return cmd.execute(args, state);
+            return command.execute(args, state);
         } else {
-            return "Command not found: '" + commandName + "'.";
+            // The system notices suspicious activity
+            int penalty = 10; // Each unrecognized command increases trace level by 10%
+            state.incrementTraceLevel(penalty);
+
+            // Check if this mistake caused a Game Over
+            if (state.isGameOverByTrace()) {
+                return "[CRITICAL WARNING] Command not found: '" + commandName + "'.\n" +
+                        "Trace Level reached 100%. You have been detected and disconnected.";
+            }
+
+            return "[WARNING] Command not found: '" + commandName + "'.\n" +
+                    "Suspicious activity logged. Trace Level increased to " + state.getTraceLevel() + "%.";
         }
     }
 }

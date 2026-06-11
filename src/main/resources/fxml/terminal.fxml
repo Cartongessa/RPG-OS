@@ -2,12 +2,39 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.unicam.cs.mpgc.rpg129301.view.TerminalController">
+<HBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.rpg129301.view.TerminalController" spacing="10" style="-fx-background-color: black; -fx-padding: 10;">
 
-<TextArea fx:id="terminalOutput" VBox.vgrow="ALWAYS" editable="false"
-          style="-fx-control-inner-background: black; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+    <VBox HBox.hgrow="ALWAYS">
+        <TextArea fx:id="terminalOutput" editable="false" focusTraversable="false" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: black; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+        <TextField fx:id="commandInput" onAction="#handleCommand" promptText="Enter command..." style="-fx-background-color: #222222; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+    </VBox>
 
-<TextField fx:id="commandInput" onAction="#handleCommand"
-           style="-fx-background-color: #333; -fx-text-fill: white; -fx-font-family: 'Courier New';" />
-</VBox>
+    <VBox prefWidth="250" spacing="15" style="-fx-border-color: #00FF00; -fx-border-width: 0 0 0 1; -fx-padding: 0 0 0 15;">
+
+        <VBox spacing="5">
+            <Label text="Trace Level" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 16px; -fx-font-weight: bold;" />
+            <ProgressBar fx:id="traceProgressBar" progress="0.0" prefWidth="200" style="-fx-accent: red; -fx-control-inner-background: black;" />
+            <Label fx:id="traceLabel" text="0%" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+        </VBox>
+
+        <VBox spacing="5">
+            <Label text="Skills" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 16px; -fx-font-weight: bold;" />
+
+            <HBox spacing="10">
+                <Label text="Scripting" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+                <Label fx:id="scriptingLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+            </HBox>
+
+            <HBox spacing="10">
+                <Label text="Problem Solving" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+                <Label fx:id="problemSolvingLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+            </HBox>
+
+            <HBox spacing="10">
+                <Label text="Decryption" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+                <Label fx:id="decryptionLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+            </HBox>
+        </VBox>
+
+    </VBox>
+</HBox>

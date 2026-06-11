@@ -1,58 +1,53 @@
-//package it.unicam.cs.mpgc.rpg129301.view;
-//
-//import javafx.fxml.FXML;
-//import javafx.scene.control.TextArea;
-//import javafx.scene.control.TextField;
-//
-//public class TerminalController {
-//    @FXML private TextArea terminalOutput;
-//    @FXML private TextField commandInput;
-//
-//    @FXML
-//    public void handleCommand() {
-//        String input = commandInput.getText();
-//        terminalOutput.appendText("> " + input + "\n");
-//        commandInput.clear();
-//    }
-//
-//
-//
-//
-//}
-
 package it.unicam.cs.mpgc.rpg129301.view;
 
 import it.unicam.cs.mpgc.rpg129301.model.GameState;
 import it.unicam.cs.mpgc.rpg129301.model.StartupEngine;
 import it.unicam.cs.mpgc.rpg129301.model.command.CommandParser;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class TerminalController {
+
+    // Terminal UI Components
     @FXML private TextArea terminalOutput;
     @FXML private TextField commandInput;
 
+    // RPG Sidebar UI Components
+    @FXML private ProgressBar traceProgressBar;
+    @FXML private Label traceLabel;
+    @FXML private Label scriptingLabel;
+    @FXML private Label problemSolvingLabel;
+    @FXML private Label decryptionLabel;
+
     private GameState state;
     private CommandParser parser;
+    private SidebarManager sidebarManager;
 
     /**
-     * Initializes the terminal by setting up the game state and command parser, and displays the initial prompt
+     * Initializes the terminal by setting up the game state, command parser, sidebar manager, and displays the initial prompt
      */
     @FXML
     public void initialize() {
         StartupEngine engine = new StartupEngine();
 
         // Set up the game state and command parser
-        GameState state = engine.setupGame(1);
-        CommandParser parser = engine.setupParser();
+        this.state = engine.setupGame(1);
+        this.parser = engine.setupParser();
+
+        // Initialize the SidebarManager to handle the right-side UI components
+        this.sidebarManager = new SidebarManager(
+                traceProgressBar, traceLabel, scriptingLabel, problemSolvingLabel, decryptionLabel
+        );
 
         // Print the title
         terminalOutput.appendText("=== RPG-OS TERMINAL v2.0 ===\n");
         terminalOutput.appendText("Type 'exit' to terminate the session.\n\n");
 
-        this.state = state;
-        this.parser = parser;
+        // Initial UI sync for the sidebar
+        sidebarManager.update(this.state);
 
         // Print the first prompt
         terminalOutput.appendText(buildPrompt());
@@ -63,7 +58,6 @@ public class TerminalController {
      */
     @FXML
     public void handleCommand() {
-
         String input = commandInput.getText().trim();
 
         if (input.isEmpty()) return;
@@ -121,11 +115,14 @@ public class TerminalController {
     }
 
     /**
-     * Syncs the game state and prints the next prompt.
+     * Syncs the game state, updates the sidebar UI, and prints the next prompt
      */
     private void endTurn() {
         // Sync the log in the state so manual saves will capture everything
         state.setCurrentLog(terminalOutput.getText());
+
+        // --- NEW: Sync the right sidebar with any changes to Trace Level or Stats ---
+        sidebarManager.update(state);
 
         // Print the next prompt ready for the user
         terminalOutput.appendText(buildPrompt());
