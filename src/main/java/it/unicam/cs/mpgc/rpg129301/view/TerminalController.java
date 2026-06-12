@@ -25,113 +25,121 @@ public class TerminalController {
     private GameState state;
     private CommandParser parser;
     private SidebarManager sidebarManager;
+    private StartupEngine engine;
 
-    /**
-     * Initializes the terminal by setting up the game state, command parser, sidebar manager, and displays the initial prompt
-     */
     @FXML
     public void initialize() {
-        StartupEngine engine = new StartupEngine();
+        // Initialize the engine and save it to the class variable
+        this.engine = new StartupEngine();
 
         // Set up the game state and command parser
         this.state = engine.setupGame(1);
         this.parser = engine.setupParser();
 
-        // Initialize the SidebarManager to handle the right-side UI components
+        // Initialize the SidebarManager
         this.sidebarManager = new SidebarManager(
                 traceProgressBar, traceLabel, scriptingLabel, problemSolvingLabel, decryptionLabel
         );
 
-        // Print the title
         terminalOutput.appendText("=== RPG-OS TERMINAL v2.0 ===\n");
         terminalOutput.appendText("Type 'exit' to terminate the session.\n\n");
 
-        // Initial UI sync for the sidebar
         sidebarManager.update(this.state);
-
-        // Print the first prompt
         terminalOutput.appendText(buildPrompt());
     }
 
-    /**
-     * Handles the command entered by the user, processes it through the CommandParser, and updates the terminal output
-     */
     @FXML
     public void handleCommand() {
         String input = commandInput.getText().trim();
 
         if (input.isEmpty()) return;
-
         commandInput.clear();
 
         if (input.equalsIgnoreCase("exit")) {
             System.exit(0);
         }
 
-        // Show the user's input
         printToTerminal(input);
 
-        // Process the command
         String response = parser.process(input, state);
-
-        // Handle response
         handleCommandResponse(response);
 
-        // Post-command check for objectives
-        checkObjectives();
+        // Check if the objective has been reached
+        checkObjective();
 
         // Log state and prepare for next input
         endTurn();
     }
 
-    /**
-     * Appends text to the terminal UI, ensuring that each new message starts on a new line
-     */
     private void printToTerminal(String text) {
         terminalOutput.appendText(text + "\n\n");
     }
 
-    /**
-     * Handles text responses and special system flags (like "[LOAD_SUCCESS]")
-     */
     private void handleCommandResponse(String response) {
-        // If the response is the special flag [LOAD_SUCCESS], refresh the terminal
+        // If the player just used load command (if the special flag is set)
         if ("[LOAD_SUCCESS]".equals(response)) {
             terminalOutput.setText(state.getCurrentLog());
             printToTerminal("\n[SYSTEM]: Game loaded successfully.");
         } else if (response != null && !response.isEmpty()) {
-            // Otherwise print the response, if not null or empty
             printToTerminal(response);
         }
     }
 
     /**
-     * Checks if the current objective is met and notifies the user if it is completed
+     * Checks if the current objective is met and triggers the next level
      */
-    private void checkObjectives() {
+    private void checkObjective() {
         if (state.getObjective() != null && state.getObjective().isCompleted(state)) {
-            printToTerminal("\n[SYSTEM]: Objective completed! " + state.getObjective().getSuccessMessage());
+
+            // Print the success banner
+            printToTerminal("=========================================\n" +
+                    "[MISSION ACCOMPLISHED]: " + state.getObjective().getSuccessMessage() + "\n" +
+                    "=========================================");
+
+            // Calculate the next level and load it
+            int nextLevelIndex = state.getLevelIndex() + 1;
+            loadNextLevel(nextLevelIndex);
         }
     }
 
     /**
-     * Syncs the game state, updates the sidebar UI, and prints the next prompt
+     * Clears the terminal, loads the next level JSON, and transfers player stats.
      */
+    private void loadNextLevel(int nextLevelIndex) {
+        try {
+            // Temporarily save the player's stats so they don't reset
+            var savedStats = state.getPlayerStats();
+
+            // Load the new level
+            this.state = engine.setupGame(nextLevelIndex);
+
+            // Transfer the stats to the new level and reset the trace level to 0
+            this.state.setPlayerStats(savedStats);
+            this.state.setTraceLevel(0);
+
+            // Clear the screen for the new level
+            terminalOutput.clear();
+            terminalOutput.appendText("=== CONNECTION ESTABLISHED: LEVEL " + nextLevelIndex + " ===\n");
+
+            if (state.getCurrentLog() != null && !state.getCurrentLog().isEmpty()) {
+                terminalOutput.appendText(state.getCurrentLog() + "\n\n");
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            // If setupGame fails (e.g., level3.json doesn't exist yet), they beat the game!
+            printToTerminal("[SYSTEM]: No further connection nodes found.");
+            printToTerminal("YOU HAVE SUCCESSFULLY HACKED THE MAINFRAME. GAME OVER.");
+        }
+    }
+
     private void endTurn() {
-        // Sync the log in the state so manual saves will capture everything
         state.setCurrentLog(terminalOutput.getText());
-
-        // Sync the right sidebar
         sidebarManager.update(state);
-
-        // Print the next prompt ready for the user
         terminalOutput.appendText(buildPrompt());
     }
 
-    /**
-     * Builds the terminal prompt based on the current user and directory in the GameState
-     * @return A string representing the terminal prompt (e.g., "guest@rpg-os:home$ ")
-     */
     private String buildPrompt() {
         return state.getCurrentUser() + "@rpg-os:" + state.getCurrentDirectory().getName() + "$ ";
     }

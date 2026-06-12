@@ -7,7 +7,7 @@ public class LoginCommand implements GameCommand {
 
     @Override
     public String execute(String[] args, GameState state) {
-        // If there is not any argument, return an error message
+        // If no arguments are provided, return an error message
         if (args.length < 1) {
             return "Usage: login <username> [password]";
         }

@@ -19,7 +19,7 @@ public class LsCommand implements GameCommand {
 
             if (showHidden || !isHidden) {
                 // Add a dot prefix for hidden files to visually distinguish them
-                String displayName = isHidden ? "." + child.getName() : child.getName();
+                String displayName = child.getName();
 
                 // Add a type prefix to indicate if it's a directory or a file
                 String typePrefix = (child instanceof GameDirectory) ? "[DIR]  " : "[FILE] ";

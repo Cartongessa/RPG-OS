@@ -5,21 +5,32 @@ import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
 
 public class DeleteFileObjective implements Objective {
     private final String targetFileName;
-    private final GameDirectory targetDirectory;
+    private final String targetDirectoryName;
 
-    public DeleteFileObjective(String targetFileName, GameDirectory targetDirectory) {
+    public DeleteFileObjective(String targetFileName, String targetDirectoryName) {
         this.targetFileName = targetFileName;
-        this.targetDirectory = targetDirectory;
+        this.targetDirectoryName = targetDirectoryName;
     }
 
     @Override
     public String getDescription() {
-        return "Delete the file '" + targetFileName + "' from the directory '" + targetDirectory.getName() + "'.";
+        return "Delete the file '" + targetFileName + "' from the directory '" + targetDirectoryName + "'.";
     }
 
     @Override
     public boolean isCompleted(GameState state) {
-        return targetDirectory.getChild(targetFileName) == null;
+        // Get the root of the file system
+        GameDirectory root = state.getCurrentDirectory().getRoot();
+
+        // Find the target directory dynamically
+        GameDirectory targetDir = root.findDirectoryByName(targetDirectoryName);
+
+        // If the directory exists, check if the file is missing (deleted)
+        if (targetDir != null) {
+            return targetDir.getChild(targetFileName) == null;
+        }
+
+        return false;
     }
 
     @Override

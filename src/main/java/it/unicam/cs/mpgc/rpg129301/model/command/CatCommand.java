@@ -16,8 +16,7 @@ public class CatCommand implements GameCommand {
         // Get the name of the file
         String targetName = args[0];
 
-        GameDirectory currentDir = state.getCurrentDirectory();
-        FileSystemNode targetNode = currentDir.getChild(targetName);
+        FileSystemNode targetNode = state.getCurrentDirectory().getChild(targetName);
 
         // If no file is found with that name, or if the found node is a directory instead of a file, else return the content
         if (targetNode == null) {

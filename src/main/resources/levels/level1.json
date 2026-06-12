@@ -44,8 +44,8 @@
                 "content": "The quick fox jumps over the lazy dog",
                 "isHidden": false
               },
-              "passwords_backup": {
-                "name": "passwords_backup.txt",
+              ".passwords_backup.txt": {
+                "name": ".passwords_backup.txt",
                 "type": "file",
                 "content": "Here is my account: 'hacker' password: 'hacker_404'",
                 "isHidden": true

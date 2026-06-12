@@ -75,6 +75,9 @@ public class StartupEngine {
         parser.register("login", new LoginCommand());
         parser.register("save", new SaveCommand());
         parser.register("load", new LoadCommand());
+        parser.register("hint", new HintCommand());
+        parser.register("exploit", new ExploitCommand());
+        parser.register("rm", new RmCommand());
 
         // Future commands like "hint" will be registered here
         return parser;

@@ -17,7 +17,7 @@ public class ObjectiveDeserializer implements JsonDeserializer<Objective> {
         registry.put("change_user", ChangeUserObjective.class);
 
         // Future objectives can be easily registered here:
-        // registry.put("delete_file", DeleteFileObjective.class);
+        registry.put("delete_file", DeleteFileObjective.class);
     }
 
     /**

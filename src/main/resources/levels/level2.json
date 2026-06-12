@@ -1,0 +1,80 @@
+{
+  "levelIndex": 2,
+  "startingAccount": "user_target",
+  "objective": {
+    "type": "delete_file",
+    "targetFileName": "system.log",
+    "targetDirectoryName": "logs"
+  },
+  "objectiveDescription": "Gain root access by exploiting the vulnerable service, then delete /logs/system.log.",
+  "accounts": {
+    "user_target": "",
+    "root": "Admin129301"
+  },
+  "fileSystem": {
+    "name": "/",
+    "type": "directory",
+    "children": {
+      "home": {
+        "name": "home",
+        "type": "directory",
+        "children": {
+          "user_target": {
+            "name": "user_target",
+            "type": "directory",
+            "children": {
+              "readme.txt": {
+                "name": "readme.txt",
+                "type": "file",
+                "content": "Agent, the system is running a vulnerable service. Read the system logs to find out which one, locate the binary, and exploit it.",
+                "isHidden": false
+              }
+            }
+          }
+        }
+      },
+      "bin": {
+        "name": "bin",
+        "type": "directory",
+        "children": {
+          "MailServer": {
+            "name": "MailServer",
+            "type": "file",
+            "content": "[ENCRYPTED BINARY] Cannot read file directly. If you meet the requirements, use the 'exploit' command to launch the Buffer Overflow attack.",
+            "isHidden": false
+          }
+        }
+      },
+      "logs": {
+        "name": "logs",
+        "type": "directory",
+        "children": {
+          "system.log": {
+            "name": "system.log",
+            "type": "file",
+            "content": "[CRITICAL ERROR] MailServer crashed. Vulnerability identified: Buffer Overflow. \n[SYSTEM NOTE] Exploitation requires Agent Scripting Level 5 or higher.",
+            "isHidden": false
+          }
+        }
+      },
+      "usr": {
+        "name": "usr",
+        "type": "directory",
+        "children": {
+          "docs": {
+            "name": "docs",
+            "type": "directory",
+            "children": {
+              "advanced_scripting.man": {
+                "name": "advanced_scripting.man",
+                "type": "file",
+                "content": "[ENCRYPTED KNOWLEDGE BASE] Use the 'learn' command to absorb this manual into your neural interface.",
+                "isHidden": false
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

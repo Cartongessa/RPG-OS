@@ -52,4 +52,11 @@ public class GameDirectory extends FileSystemNode {
         }
         return null; // Not found in this branch
     }
+
+    /**
+     * Removes a child node by its name.
+     */
+    public void removeChild(String childName) {
+        children.remove(childName);
+    }
 }

@@ -5,7 +5,7 @@
 <HBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.rpg129301.view.TerminalController" spacing="10" style="-fx-background-color: black; -fx-padding: 10;">
 
     <VBox HBox.hgrow="ALWAYS">
-        <TextArea fx:id="terminalOutput" editable="false" focusTraversable="false" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: black; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+        <TextArea fx:id="terminalOutput" wrapText="true" editable="false" focusTraversable="false" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: black; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
         <TextField fx:id="commandInput" onAction="#handleCommand" promptText="Enter command..." style="-fx-background-color: #222222; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
     </VBox>
 
