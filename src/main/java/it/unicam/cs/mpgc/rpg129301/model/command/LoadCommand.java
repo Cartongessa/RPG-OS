@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.rpg129301.model.command;
 
 import com.google.gson.Gson;
 import it.unicam.cs.mpgc.rpg129301.model.GameState;
+import it.unicam.cs.mpgc.rpg129301.model.PlayerStats;
 import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
 
 import java.io.File;
@@ -14,6 +15,8 @@ public class LoadCommand implements GameCommand {
         int levelIndex;
         String currentPosition;
         String log;
+        int traceLevel;
+        PlayerStats playerStats;
     }
 
     @Override
@@ -36,7 +39,6 @@ public class LoadCommand implements GameCommand {
 
         Gson gson = new Gson();
 
-
         try (FileReader reader = new FileReader(saveFile)) {
             // Create a variable with all the data from the JSON file
             SaveGameData loadedData = gson.fromJson(reader, SaveGameData.class);
@@ -44,6 +46,13 @@ public class LoadCommand implements GameCommand {
             // Set the state to the parameters found in the file
             state.setLevelIndex(loadedData.levelIndex);
             state.setCurrentLog(loadedData.log);
+
+            // Load the RPG metrics into the current state
+            state.setTraceLevel(Math.max(0, loadedData.traceLevel));
+
+            if (loadedData.playerStats != null) {
+                state.setPlayerStats(loadedData.playerStats);
+            }
 
             // Resolve the directory
             GameDirectory currentDir = state.getCurrentDirectory();
@@ -56,6 +65,7 @@ public class LoadCommand implements GameCommand {
                 return "[ERROR]: Directory '" + loadedData.currentPosition + "' not found in the file system.";
             }
 
+            // This flag is caught by TerminalController to trigger a full UI refresh
             return "[LOAD_SUCCESS]";
 
         } catch (Exception e) {
@@ -70,8 +80,8 @@ public class LoadCommand implements GameCommand {
     public String getCommandUsage() { return " [filename]"; }
 
     @Override
-    public String getDescription() { return "Loads a previously saved game state"; }
+    public String getDescription() { return "Loads a previously saved game state."; }
 
     @Override
-    public String getBriefDescription() { return "Loads the game"; }
+    public String getBriefDescription() { return "Loads the game."; }
 }

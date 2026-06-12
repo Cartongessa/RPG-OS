@@ -88,7 +88,7 @@ public class TerminalController {
      * Appends text to the terminal UI, ensuring that each new message starts on a new line
      */
     private void printToTerminal(String text) {
-        terminalOutput.appendText(text + "\n");
+        terminalOutput.appendText(text + "\n\n");
     }
 
     /**
@@ -121,7 +121,7 @@ public class TerminalController {
         // Sync the log in the state so manual saves will capture everything
         state.setCurrentLog(terminalOutput.getText());
 
-        // --- NEW: Sync the right sidebar with any changes to Trace Level or Stats ---
+        // Sync the right sidebar
         sidebarManager.update(state);
 
         // Print the next prompt ready for the user

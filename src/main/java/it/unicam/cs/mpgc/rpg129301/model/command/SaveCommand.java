@@ -33,6 +33,8 @@ public class SaveCommand implements GameCommand {
         saveData.put("levelIndex", state.getLevelIndex());
         saveData.put("currentPosition", state.getCurrentDirectory().getName());
         saveData.put("log", state.getCurrentLog());
+        saveData.put("traceLevel", state.getTraceLevel());
+        saveData.put("playerStats", state.getPlayerStats());
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
