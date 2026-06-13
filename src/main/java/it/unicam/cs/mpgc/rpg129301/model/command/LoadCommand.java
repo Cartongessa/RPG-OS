@@ -14,7 +14,7 @@ import static it.unicam.cs.mpgc.rpg129301.model.command.SaveCommand.SAVE_DIRECTO
 
 public class LoadCommand implements GameCommand {
 
-    private final StartupEngine engine; // <-- NEW: Dependency Injection
+    private final StartupEngine engine;
 
     // Constructor to receive the engine
     public LoadCommand(StartupEngine engine) {
