@@ -83,6 +83,7 @@ public class StartupEngine {
         parser.register("ls", new LsCommand());
         parser.register("rm", new RmCommand());
         parser.register("save", new SaveCommand());
+        parser.register("tutorial", new TutorialCommand());
 
         return parser;
     }

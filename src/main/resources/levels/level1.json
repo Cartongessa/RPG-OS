@@ -41,7 +41,7 @@
               "readme.txt": {
                 "name": "readme.txt",
                 "type": "file",
-                "content": "The quick fox jumps over the lazy dog",
+                "content": "Welcome to the RPG OS, Agent! Explore around here and find *hidden* secrets.",
                 "isHidden": false
               },
               ".passwords_backup.txt": {

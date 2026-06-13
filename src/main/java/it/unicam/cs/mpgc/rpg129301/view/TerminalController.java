@@ -43,6 +43,7 @@ public class TerminalController {
 
         terminalOutput.appendText("=== RPG-OS TERMINAL v2.0 ===\n");
         terminalOutput.appendText("Type 'exit' to terminate the session.\n\n");
+        terminalOutput.appendText("Type 'tutorial' to see a really brief guide about how to play.\n\n");
 
         sidebarManager.update(this.state);
         terminalOutput.appendText(buildPrompt());
