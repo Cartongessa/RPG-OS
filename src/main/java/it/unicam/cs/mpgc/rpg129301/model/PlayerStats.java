@@ -1,34 +1,41 @@
 package it.unicam.cs.mpgc.rpg129301.model;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class PlayerStats {
 
-    private int scripting;
-    private int problemSolving;
-    private int decryption;
     private int hintsUsed;
 
-    public PlayerStats(int scripting, int problemSolving, int decryption) {
-        this.scripting = scripting;
-        this.problemSolving = problemSolving;
-        this.decryption = decryption;
-        this.hintsUsed = 0;
+    private Map<String, Integer> skills = new HashMap<>();
+
+    public PlayerStats() {
+        skills.put("scripting", 1);
+        skills.put("decryption", 0);
+        skills.put("problem_solving", 0);
     }
 
-    public int getScripting() { return scripting; }
-    public void setScripting(int scripting) { this.scripting = scripting; }
+    /**
+     * Retrieves a skill level dynamically. Returns 0 if the skill doesn't exist.
+     */
+    public int getSkillLevel(String skillName) {
+        return skills.getOrDefault(skillName.toLowerCase(), 0);
+    }
 
-    public int getProblemSolving() { return problemSolving; }
-    public void setProblemSolving(int problemSolving) { this.problemSolving = problemSolving; }
-
-    public int getDecryption() { return decryption; }
-    public void setDecryption(int decryption) { this.decryption = decryption; }
-
+    /**
+     * Increases a specific skill dynamically.
+     */
+    public void increaseSkill(String skillName, int amount) {
+        String key = skillName.toLowerCase();
+        int currentLevel = getSkillLevel(key);
+        skills.put(key, currentLevel + amount);
+    }
 
     /**
      * Calculates the maximum number of hints based on the player's Problem-Solving level
      */
     public int getMaxHints() {
-        return 1 + (problemSolving / 2);
+        return 1 + (getSkillLevel("problem_solving") / 2);
     }
 
     /**
@@ -39,7 +46,7 @@ public class PlayerStats {
     }
 
     /**
-     * Use an hint if possible, returns true if an hint was used, false otherwise
+     * Use a hint if possible, returns true if a hint was used, false otherwise
      */
     public boolean useHint() {
         if (getRemainingHints() > 0) {
@@ -47,5 +54,9 @@ public class PlayerStats {
             return true;
         }
         return false;
+    }
+
+    public Map<String, Integer> getSkills() {
+        return skills;
     }
 }

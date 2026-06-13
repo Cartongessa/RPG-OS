@@ -76,11 +76,37 @@ public class TerminalController {
     }
 
     private void handleCommandResponse(String response) {
-        // If the player just used load command (if the special flag is set)
+        // If the response is null or empty, simply return
+        if (response == null || response.isEmpty()) {
+            return;
+        }
+
+        // If the response indicates a successful load, update the terminal output and log
         if ("[LOAD_SUCCESS]".equals(response)) {
             terminalOutput.setText(state.getCurrentLog());
-            printToTerminal("\n[SYSTEM]: Game loaded successfully.");
-        } else if (response != null && !response.isEmpty()) {
+            printToTerminal("[SYSTEM]: Game loaded successfully.");
+
+        // If the response indicates an unknown command, increment the trace level and check for game over
+        } else if (response.startsWith("[UNKNOWN_COMMAND]")) {
+            String wrongCommand = response.replace("[UNKNOWN_COMMAND] ", "").trim();
+
+            // Add a penalty for the wrong command
+            int penalty = 10;
+            state.incrementTraceLevel(penalty);
+
+            // Check game over
+            if (state.isGameOverByTrace()) {
+                printToTerminal("[CRITICAL WARNING] Command not found: '" + wrongCommand +
+                        "Trace Level reached 100%. ACCESS DENIED.\n" +
+                        "GAME OVER. Type 'exit' to close the terminal.");
+                // Block the input
+                commandInput.setDisable(true);
+            } else {
+                printToTerminal("[WARNING] Command not found: '" + wrongCommand + "'.\n" +
+                        "Suspicious activity logged. Trace Level increased to " + state.getTraceLevel() + "%.");
+            }
+        // If the response does not contain any special flag, just print it to the terminal
+        } else {
             printToTerminal(response);
         }
     }

@@ -29,29 +29,17 @@ public class CommandParser {
             return "";
         }
 
-        // Split the input into the command and its arguments
         String[] parts = input.trim().split("\\s+");
         String commandName = parts[0].toLowerCase();
 
         GameCommand command = this.commands.get(commandName);
 
         if (command != null) {
-            // Command exists, execute it
             String[] args = Arrays.copyOfRange(parts, 1, parts.length);
             return command.execute(args, state);
         } else {
-            // The system notices suspicious activity
-            int penalty = 10; // Each unrecognized command increases trace level by 10%
-            state.incrementTraceLevel(penalty);
-
-            // Check if this mistake caused a Game Over
-            if (state.isGameOverByTrace()) {
-                return "[CRITICAL WARNING] Command not found: '" + commandName + "'.\n" +
-                        "Trace Level reached 100%. You have been detected and disconnected.";
-            }
-
-            return "[WARNING] Command not found: '" + commandName + "'.\n" +
-                    "Suspicious activity logged. Trace Level increased to " + state.getTraceLevel() + "%.";
+            // Returns a special flag indicating that the command is unknown
+            return "[UNKNOWN_COMMAND] " + commandName;
         }
     }
 }

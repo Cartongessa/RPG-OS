@@ -35,7 +35,7 @@ public class RmCommand implements GameCommand {
     public String getCommandName() { return "rm"; }
 
     @Override
-    public String getCommandUsage() { return "rm [filename]"; }
+    public String getCommandUsage() { return " [filename]"; }
 
     @Override
     public String getDescription() { return "Removes a file from the current directory."; }

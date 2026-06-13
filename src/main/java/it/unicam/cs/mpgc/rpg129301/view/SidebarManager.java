@@ -45,9 +45,9 @@ public class SidebarManager {
         // Update the Character Skill Labels
         PlayerStats stats = state.getPlayerStats();
         if (stats != null) {
-            scriptingLabel.setText(String.valueOf(stats.getScripting()));
-            problemSolvingLabel.setText(String.valueOf(stats.getProblemSolving()));
-            decryptionLabel.setText(String.valueOf(stats.getDecryption()));
+            scriptingLabel.setText(String.valueOf(stats.getSkillLevel("scripting")));
+            problemSolvingLabel.setText(String.valueOf(stats.getSkillLevel("problem_solving")));
+            decryptionLabel.setText(String.valueOf(stats.getSkillLevel("decryption")));
         }
     }
 }

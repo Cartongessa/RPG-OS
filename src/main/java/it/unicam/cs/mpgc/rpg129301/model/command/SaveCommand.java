@@ -12,14 +12,17 @@ import java.util.Map;
 
 public class SaveCommand implements GameCommand {
 
+    // Constants for the save directory and file extension
+    public static final String SAVE_DIRECTORY = "saves";
+    public static final String FILE_EXTENSION = ".json";
+
     @Override
     public String execute(String[] args, GameState state) {
         // If the user wants to set a name for the save file
-        String fileName = args.length > 0 ? (args[0] + ".json") : "savegame.json";
+        String fileName = args.length > 0 ? (args[0] + FILE_EXTENSION) : "savegame"+FILE_EXTENSION;
 
         // Define the directory and the full file path
-        String directoryName = "saves";
-        File directory = new File(directoryName);
+        File directory = new File(SAVE_DIRECTORY);
 
         // Create the directory if it doesn't exist
         if (!directory.exists()) {
