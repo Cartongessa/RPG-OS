@@ -8,6 +8,9 @@ import it.unicam.cs.mpgc.rpg129301.model.fs.GameDirectory;
 import java.io.File;
 import java.io.FileReader;
 
+import static it.unicam.cs.mpgc.rpg129301.model.command.SaveCommand.FILE_EXTENSION;
+import static it.unicam.cs.mpgc.rpg129301.model.command.SaveCommand.SAVE_DIRECTORY;
+
 public class LoadCommand implements GameCommand {
 
     // Helper class that represents JSON structure
@@ -21,16 +24,16 @@ public class LoadCommand implements GameCommand {
 
     @Override
     public String execute(String[] args, GameState state) {
-        // If there is not any argument, save the file as savegame.json
-        String fileName = args.length > 0 ? args[0] : "savegame.json";
+        // If no arguments are provided, return an error message
+        String fileName = args.length > 0 ? args[0] : "savegame" + FILE_EXTENSION;
 
-        // If the provided filename does not end with .json, append it
-        if (args.length > 0 && !fileName.endsWith(".json")) {
-            fileName += ".json";
+        // If the provided filename does not end with the defined file extension, append it
+        if (args.length > 0 && !fileName.endsWith(FILE_EXTENSION)) {
+            fileName += FILE_EXTENSION;
         }
 
         // Identify the input as a file in the "saves" directory
-        File saveFile = new File("saves", fileName);
+        File saveFile = new File(SAVE_DIRECTORY, fileName);
 
         // If the file does not exist, return an error message
         if (!saveFile.exists()) {

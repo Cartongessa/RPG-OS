@@ -31,7 +31,7 @@ public class GameState {
         this.accounts = accounts;
         this.levelIndex = levelIndex;
         this.currentLog = "";
-        this.playerStats = new PlayerStats(0, 0, 0);
+        this.playerStats = new PlayerStats();
         this.traceLevel = 0;
     }
 

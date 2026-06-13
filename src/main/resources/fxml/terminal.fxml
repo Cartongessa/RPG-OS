@@ -2,11 +2,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.rpg129301.view.TerminalController" spacing="10" style="-fx-background-color: black; -fx-padding: 10;">
+<HBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.rpg129301.view.TerminalController"
+      prefWidth="850" prefHeight="600"
+      spacing="10" style="-fx-background-color: black; -fx-padding: 10;">
 
     <VBox HBox.hgrow="ALWAYS">
-        <TextArea fx:id="terminalOutput" wrapText="true" editable="false" focusTraversable="false" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: black; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
-        <TextField fx:id="commandInput" onAction="#handleCommand" promptText="Enter command..." style="-fx-background-color: #222222; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+        <TextArea fx:id="terminalOutput" wrapText="true" editable="false" focusTraversable="false" VBox.vgrow="ALWAYS"
+                  style="-fx-control-inner-background: black; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 14px;" />
+        <TextField fx:id="commandInput" onAction="#handleCommand" promptText="Enter command..."
+                   style="-fx-background-color: #222222; -fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 14px;" />
     </VBox>
 
     <VBox prefWidth="250" spacing="15" style="-fx-border-color: #00FF00; -fx-border-width: 0 0 0 1; -fx-padding: 0 0 0 15;">
@@ -14,25 +18,25 @@
         <VBox spacing="5">
             <Label text="Trace Level" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 16px; -fx-font-weight: bold;" />
             <ProgressBar fx:id="traceProgressBar" progress="0.0" prefWidth="200" style="-fx-accent: red; -fx-control-inner-background: black;" />
-            <Label fx:id="traceLabel" text="0%" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+            <Label fx:id="traceLabel" text="0%" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 13px;" />
         </VBox>
 
         <VBox spacing="5">
             <Label text="Skills" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 16px; -fx-font-weight: bold;" />
 
             <HBox spacing="10">
-                <Label text="Scripting" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
-                <Label fx:id="scriptingLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+                <Label text="Scripting" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 13px;" />
+                <Label fx:id="scriptingLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 13px;" />
             </HBox>
 
             <HBox spacing="10">
-                <Label text="Problem Solving" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
-                <Label fx:id="problemSolvingLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+                <Label text="Problem Solving" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 13px;" />
+                <Label fx:id="problemSolvingLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 13px;" />
             </HBox>
 
             <HBox spacing="10">
-                <Label text="Decryption" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
-                <Label fx:id="decryptionLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New';" />
+                <Label text="Decryption" prefWidth="130" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 13px;" />
+                <Label fx:id="decryptionLabel" text="0" style="-fx-text-fill: #00FF00; -fx-font-family: 'Courier New'; -fx-font-size: 13px;" />
             </HBox>
         </VBox>
 

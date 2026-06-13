@@ -6,7 +6,7 @@
     "targetFileName": "system.log",
     "targetDirectoryName": "logs"
   },
-  "objectiveDescription": "Gain root access by exploiting the vulnerable service, then delete /logs/system.log.",
+  "objectiveDescription": "Gain fakeRoot access by exploiting the vulnerable service, then delete /logs/system.log.",
   "accounts": {
     "user_target": "",
     "root": "Admin129301"
@@ -26,7 +26,7 @@
               "readme.txt": {
                 "name": "readme.txt",
                 "type": "file",
-                "content": "Agent, the system is running a vulnerable service. Read the system logs to find out which one, locate the binary, and exploit it.",
+                "content": "Agent, the system is running a vulnerable service. Read the system logs to find out which one, locate the BINary, and exploit it.",
                 "isHidden": false
               }
             }
@@ -40,8 +40,12 @@
           "MailServer": {
             "name": "MailServer",
             "type": "file",
-            "content": "[ENCRYPTED BINARY] Cannot read file directly. If you meet the requirements, use the 'exploit' command to launch the Buffer Overflow attack.",
-            "isHidden": false
+            "content": "[ENCRYPTED BINARY] Cannot read file directly. Use the 'exploit' command.",
+            "isHidden": false,
+            "requiredSkill": "scripting",
+            "requiredLevel": 1,
+            "targetUserOnSuccess": "fakeRoot",
+            "successMessage": "Privilege escalation complete. Superuser access granted via Buffer Overflow."
           }
         }
       },
@@ -52,8 +56,10 @@
           "system.log": {
             "name": "system.log",
             "type": "file",
-            "content": "[CRITICAL ERROR] MailServer crashed. Vulnerability identified: Buffer Overflow. \n[SYSTEM NOTE] Exploitation requires Agent Scripting Level 5 or higher.",
-            "isHidden": false
+            "content": "[CRITICAL ERROR] MailServer crashed. Vulnerability identified: buffer overflow. \n[SYSTEM NOTE] Exploitation requires Scripting Level 1 or higher.",
+            "isHidden": false,
+            "requiredSkill": "scripting",
+            "requiredLevel": 1
           }
         }
       },

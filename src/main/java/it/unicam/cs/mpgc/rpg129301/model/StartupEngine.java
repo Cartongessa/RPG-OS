@@ -32,18 +32,22 @@ public class StartupEngine {
         Map<String, String> accounts = levelData.getAccounts();
 
         try {
-            // Navigate to the starting directory based on the provided starting account
             FileSystemNode homeNode = root.getChild("home");
-            // If the node is a directory
-            if (homeNode instanceof GameDirectory homeDir) {
-                // Find the starting directory by looking for the directory named as the starting account
-                FileSystemNode startNode = homeDir.getChild(startAccount);
-                // If the starting node is a directory, initialize the GameState with it
-                if (startNode instanceof GameDirectory startingDir) {
-                    return new GameState(startingDir, startAccount, levelData.getObjective(), accounts, levelIndex);
-                }
+
+            // If home directory does not exist, create a fallback state
+            if (!(homeNode instanceof GameDirectory homeDir)) {
+                return createFallbackState(root);
             }
-            return createFallbackState(root);
+
+            FileSystemNode startNode = homeDir.getChild(startAccount);
+
+            // If the directory of the user does not exist, create a fallback state
+            if (!(startNode instanceof GameDirectory startingDir)) {
+                return createFallbackState(root);
+            }
+
+            return new GameState(startingDir, startAccount, levelData.getObjective(), accounts, levelIndex);
+
         } catch (Exception e) {
             System.err.println("Error while setting up the starting directory: " + e.getMessage());
             return createFallbackState(root);
@@ -68,18 +72,18 @@ public class StartupEngine {
     public CommandParser setupParser() {
         CommandParser parser = new CommandParser();
 
-        parser.register("ls", new LsCommand());
-        parser.register("cd", new CdCommand());
         parser.register("cat", new CatCommand());
-        parser.register("help", new HelpCommand(parser.getRegisteredCommands()));
-        parser.register("login", new LoginCommand());
-        parser.register("save", new SaveCommand());
-        parser.register("load", new LoadCommand());
-        parser.register("hint", new HintCommand());
+        parser.register("cd", new CdCommand());
         parser.register("exploit", new ExploitCommand());
+        parser.register("help", new HelpCommand(parser.getRegisteredCommands()));
+        parser.register("hint", new HintCommand());
+        parser.register("learn", new LearnCommand());
+        parser.register("load", new LoadCommand());
+        parser.register("login", new LoginCommand());
+        parser.register("ls", new LsCommand());
         parser.register("rm", new RmCommand());
+        parser.register("save", new SaveCommand());
 
-        // Future commands like "hint" will be registered here
         return parser;
     }
 }
