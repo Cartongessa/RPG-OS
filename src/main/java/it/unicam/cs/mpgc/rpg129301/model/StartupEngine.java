@@ -78,7 +78,7 @@ public class StartupEngine {
         parser.register("help", new HelpCommand(parser.getRegisteredCommands()));
         parser.register("hint", new HintCommand());
         parser.register("learn", new LearnCommand());
-        parser.register("load", new LoadCommand());
+        parser.register("load", new LoadCommand(this));
         parser.register("login", new LoginCommand());
         parser.register("ls", new LsCommand());
         parser.register("rm", new RmCommand());
